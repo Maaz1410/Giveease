@@ -15,6 +15,8 @@ export default function RegisterForm() {
     contactPersonID: null,
   });
 
+  const [status, setStatus] = useState("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -33,9 +35,34 @@ export default function RegisterForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key as keyof typeof formData] as any);
+    }
+
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      body: data,
+    });
+
+    if (res.ok) {
+      setStatus("Registration submitted successfully!");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        organization: "",
+        address: "",
+        zipCode: "",
+        mission: "",
+        registrationCertificate: null,
+        contactPersonID: null,
+      });
+    } else {
+      setStatus("Failed to submit registration. Please try again.");
+    }
   };
 
   return (
@@ -43,6 +70,7 @@ export default function RegisterForm() {
       <form 
         onSubmit={handleSubmit}
         className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8"
+        encType="multipart/form-data"
       >
         <h2 className="text-2xl font-bold text-blue-800 text-center mb-6">NGO Registration</h2>
 
@@ -152,6 +180,8 @@ export default function RegisterForm() {
         >
           Register NGO
         </button>
+
+        {status && <p className="text-center text-green-700 mt-4 font-medium">{status}</p>}
       </form>
     </div>
   );
