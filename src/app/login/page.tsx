@@ -67,7 +67,7 @@ export default function LoginPage() {
       </motion.form>
       
       {/* Sign Up Link */}
-      <p className="mt-4 text-gray-700">Don't have an account? <a href="/register" className="text-blue-600 hover:underline">Sign up</a></p>
+      <p className="mt-4 text-gray-700">Dont have an account? <a href="/register" className="text-blue-600 hover:underline">Sign up</a></p>
     </div>
   );
 }
